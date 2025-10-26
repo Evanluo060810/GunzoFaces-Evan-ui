@@ -1,0 +1,224 @@
+.cropit-preview {
+  background-color: #f8f8f8;
+  background-size: cover;
+  border: 3px solid #ccc;
+  border-radius: 3px;
+  margin-top: 7px;
+  width: 350px;
+  height: 350px;
+  text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+  font-size: 1em;
+  line-height: 50px;
+  text-align: right;
+  color: #455d7a;
+
+}
+
+.cropit-preview-image-container {
+  cursor: move;
+
+
+}
+
+.cropit-preview-background {
+  opacity: .2;
+  cursor: auto;
+
+
+}
+
+.image-size-label {
+  margin-top: 10px;
+}
+
+#image-cropper {
+  overflow: hidden;
+}
+
+input {
+  /* Use relative position to prevent from being covered by image background */
+  position: relative;
+  z-index: 10;
+  display: block;
+
+}
+
+button {}
+
+
+@font-face {
+  font-family: "koverwatch";
+  src: local("koverwatch"), local("koverwatch"), url("font/koverwatch.ttf") format("truetype");
+  src: local('koverwatch'), local('koverwatch'),
+    url("font/koverwatch.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("font/BebasNeue.otf");
+  src: local('Bebas Neue'), local('Bebas Neue'),
+    url("font/BebasNeue.otf") format("opentype");
+}
+
+
+
+body {
+  background-color: #233142;
+  margin-top: 0px;
+  font-size: 20px;
+  color: #e3e3e3;
+}
+
+a {
+  color: #e1c77e;
+}
+
+aside {
+  postion: absolute;
+  text-align: right;
+  right: 0px;
+  top: 65px;
+}
+
+
+.mainTable {
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.mainTable th {
+  padding: 0 10px;
+}
+
+.image-editor tr {
+  line-height: 35px;
+}
+
+.image-editor th {
+  width: 150px;
+}
+
+
+
+#myDIV {
+  position: absolute;
+
+}
+
+.first {
+  border: none;
+  border-top: 6px dotted #f95959;
+  width: 100%;
+  position: absolute;
+  z-index: 1000;
+  vertical-align: middle;
+  top: 175px;
+  background: transparent;
+  opacity: 0.6;
+
+}
+
+.second {
+  border: none;
+  border-left: 6px dotted #f95959;
+  height: 100%;
+  position: absolute;
+  z-index: 1200;
+  top: -10px;
+  left: 183px;
+  background: transparent;
+  opacity: 0.6;
+}
+
+
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 10000;
+  /* Sit on top */
+  padding-top: 50px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  color: black;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button {
+  background-color: #f95959;
+  color: #fff;
+  border: 1px #f90000 solid;
+  position: relative;
+  height: 40px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 800ms ease all;
+  outline: none;
+  width: 7em
+}
+
+button:hover {
+  background: #fff;
+  color: #f95959;
+}
+
+button:before,
+button:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2px;
+  width: 0;
+  background: #f95959;
+  transition: 400ms ease all;
+}
+
+button:after {
+  right: inherit;
+  top: inherit;
+  left: 0;
+  bottom: 0;
+}
+
+button:hover:before,
+button:hover:after {
+  width: 100%;
+  transition: 800ms ease all;
+}
