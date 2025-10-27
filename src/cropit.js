@@ -1,84 +1,68 @@
 class Cropit {
   constructor(jQuery, element, options) {
     this.$el = $(element);
-
-    const defaults = this.loadDefaults(this.$el); // 修正：原代码可能遗漏了this
+    const defaults = this.loadDefaults(this.$el);
     this.options = $.extend({}, defaults, options);
-
     this.init();
   }
 
   init() {
-    // 为图片对象添加跨域属性，允许跨域加载
-    this.image = new Image();
-    this.image.crossOrigin = 'anonymous'; // 关键：允许跨域图片加载
-    this.preImage = new Image();
-    this.preImage.crossOrigin = 'anonymous'; // 预加载图片也添加跨域属性
+    // 初始化图片对象（统一设置跨域属性）
+    [this.image, this.preImage] = ['image', 'preImage'].map(() => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      return img;
+    });
 
+    // 绑定图片事件（统一处理）
     this.image.onload = this.onImageLoaded.bind(this);
     this.preImage.onload = this.onPreImageLoaded.bind(this);
-    this.image.onerror = this.preImage.onerror = () => {
-      this.onImageError.call(this, ERRORS.IMAGE_FAILED_TO_LOAD);
-    };
+    [this.image, this.preImage].forEach(img => {
+      img.onerror = () => this.onImageError(ERRORS.IMAGE_FAILED_TO_LOAD);
+    });
 
+    // 初始化DOM元素
     this.$preview = this.options.$preview.css('position', 'relative');
     this.$fileInput = this.options.$fileInput.attr({ accept: 'image/*' });
     this.$zoomSlider = this.options.$zoomSlider.attr({ min: 0, max: 1, step: 0.01 });
 
     this.previewSize = {
-      width: this.options.width || this.$preview.innerWidth(),
-      height: this.options.height || this.$preview.innerHeight(),
+      width: this.options.width ?? this.$preview.innerWidth(),
+      height: this.options.height ?? this.$preview.innerHeight(),
     };
 
+    // 创建图片容器（提取样式配置）
+    const imageStyle = {
+      transformOrigin: 'top left',
+      webkitTransformOrigin: 'top left',
+      willChange: 'transform',
+    };
     this.$image = $('<img />')
       .addClass(CLASS_NAMES.PREVIEW_IMAGE)
       .attr('alt', '')
-      .css({
-        transformOrigin: 'top left',
-        webkitTransformOrigin: 'top left',
-        willChange: 'transform',
-      });
+      .css(imageStyle);
     this.$imageContainer = $('<div />')
       .addClass(CLASS_NAMES.PREVIEW_IMAGE_CONTAINER)
-      .css({
-        position: 'absolute',
-        overflow: 'hidden',
-        left: 0,
-        top: 0,
-        width: '100%',
-        height: '100%',
-      })
+      .css(this.getContainerStyle())
       .append(this.$image);
     this.$preview.append(this.$imageContainer);
 
+    // 处理背景图片（简化数组处理）
     if (this.options.imageBackground) {
-      if ($.isArray(this.options.imageBackgroundBorderWidth)) {
-        this.bgBorderWidthArray = this.options.imageBackgroundBorderWidth;
-      } else {
-        this.bgBorderWidthArray = [0, 1, 2, 3].map(() => this.options.imageBackgroundBorderWidth);
-      }
+      this.bgBorderWidthArray = Array.isArray(this.options.imageBackgroundBorderWidth)
+        ? this.options.imageBackgroundBorderWidth
+        : Array(4).fill(this.options.imageBackgroundBorderWidth);
 
       this.$bg = $('<img />')
         .addClass(CLASS_NAMES.PREVIEW_BACKGROUND)
         .attr('alt', '')
-        .css({
-          position: 'relative',
-          left: this.bgBorderWidthArray[3],
-          top: this.bgBorderWidthArray[0],
-          transformOrigin: 'top left',
-          webkitTransformOrigin: 'top left',
-          willChange: 'transform',
+        .css({ ...imageStyle, 
+          left: this.bgBorderWidthArray[3], 
+          top: this.bgBorderWidthArray[0] 
         });
       this.$bgContainer = $('<div />')
         .addClass(CLASS_NAMES.PREVIEW_BACKGROUND_CONTAINER)
-        .css({
-          position: 'absolute',
-          zIndex: 0,
-          top: -this.bgBorderWidthArray[0],
-          right: -this.bgBorderWidthArray[1],
-          bottom: -this.bgBorderWidthArray[2],
-          left: -this.bgBorderWidthArray[3],
-        })
+        .css(this.getBgContainerStyle())
         .append(this.$bg);
       if (this.bgBorderWidthArray[0] > 0) {
         this.$bgContainer.css('overflow', 'hidden');
@@ -87,25 +71,41 @@ class Cropit {
     }
 
     this.initialZoom = this.options.initialZoom;
-
     this.imageLoaded = false;
-
     this.moveContinue = false;
-
-    this.zoomer = new Zoomer(); // 假设Zoomer已定义（原代码可能遗漏）
-
-    if (this.options.allowDragNDrop) {
-      $.event.props.push('dataTransfer');
-    }
+    this.zoomer = new Zoomer();
 
     this.bindListeners();
 
-    if (this.options.imageState && this.options.imageState.src) {
+    if (this.options.imageState?.src) {
       this.loadImage(this.options.imageState.src);
     }
   }
 
-  // 补充原代码中缺失的loadDefaults方法（根据上下文推测）
+  // 提取容器样式配置
+  getContainerStyle() {
+    return {
+      position: 'absolute',
+      overflow: 'hidden',
+      left: 0,
+      top: 0,
+      width: '100%',
+      height: '100%',
+    };
+  }
+
+  // 提取背景容器样式
+  getBgContainerStyle() {
+    return {
+      position: 'absolute',
+      zIndex: 0,
+      top: -this.bgBorderWidthArray[0],
+      right: -this.bgBorderWidthArray[1],
+      bottom: -this.bgBorderWidthArray[2],
+      left: -this.bgBorderWidthArray[3],
+    };
+  }
+
   loadDefaults($el) {
     return {
       $preview: $el.find(`.${CLASS_NAMES.PREVIEW}`),
@@ -136,39 +136,36 @@ class Cropit {
     this.$zoomSlider.on(EVENTS.ZOOM_INPUT, this.onZoomSliderChange.bind(this));
 
     if (this.options.allowDragNDrop) {
-      this.$imageContainer.on('dragover.cropit dragleave.cropit', this.onDragOver.bind(this));
-      this.$imageContainer.on('drop.cropit', this.onDrop.bind(this));
+      this.$imageContainer
+        .on('dragover.cropit dragleave.cropit', this.onDragOver.bind(this))
+        .on('drop.cropit', this.onDrop.bind(this));
     }
   }
 
   unbindListeners() {
     this.$fileInput.off('change.cropit');
-    this.$imageContainer.off(EVENTS.PREVIEW);
-    this.$imageContainer.off('dragover.cropit dragleave.cropit drop.cropit');
+    this.$imageContainer
+      .off(EVENTS.PREVIEW)
+      .off('dragover.cropit dragleave.cropit drop.cropit');
     this.$zoomSlider.off(EVENTS.ZOOM_INPUT);
   }
 
   onFileChange(e) {
     this.options.onFileChange(e);
-
-    if (this.$fileInput.get(0).files) {
-      this.loadFile(this.$fileInput.get(0).files[0]);
-    }
+    const file = this.$fileInput.get(0).files?.[0];
+    if (file) this.loadFile(file);
   }
 
   loadFile(file) {
-    const fileReader = new FileReader();
-    if (file && file.type.match('image')) {
-      fileReader.readAsDataURL(file);
-      fileReader.onload = this.onFileReaderLoaded.bind(this);
-      fileReader.onerror = this.onFileReaderError.bind(this);
-    } else if (file) {
+    if (!file?.type.match('image')) {
       this.onFileReaderError();
+      return;
     }
-  }
 
-  onFileReaderLoaded(e) {
-    this.loadImage(e.target.result);
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = e => this.loadImage(e.target.result);
+    fileReader.onerror = () => this.onFileReaderError();
   }
 
   onFileReaderError() {
@@ -177,7 +174,7 @@ class Cropit {
 
   onDragOver(e) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+    e.originalEvent.dataTransfer.dropEffect = 'copy';
     this.$preview.toggleClass(CLASS_NAMES.DRAG_HOVERED, e.type === 'dragover');
   }
 
@@ -185,39 +182,30 @@ class Cropit {
     e.preventDefault();
     e.stopPropagation();
 
-    const files = Array.prototype.slice.call(e.dataTransfer.files, 0);
-    files.some((file) => {
-      if (!file.type.match('image')) { return false; }
-
-      this.loadFile(file);
-      return true;
-    });
+    const files = Array.from(e.originalEvent.dataTransfer.files);
+    const imageFile = files.find(file => file.type.match('image'));
+    if (imageFile) this.loadFile(imageFile);
 
     this.$preview.removeClass(CLASS_NAMES.DRAG_HOVERED);
   }
 
+  // 使用fetch替代XHR，简化远程图片加载
   loadImage(imageSrc) {
-    if (!imageSrc) { return; }
+    if (!imageSrc) return;
 
     this.options.onImageLoading();
-    this.setImageLoadingClass();
+    this.setPreviewClass('loading');
 
-    if (imageSrc.indexOf('data') === 0) {
-      // 本地DataURL无需跨域处理
+    if (imageSrc.startsWith('data')) {
       this.preImage.src = imageSrc;
     } else {
-      // 远程图片通过XHR加载为blob，避免跨域限制
-      const xhr = new XMLHttpRequest();
-      xhr.onload = (e) => {
-        if (e.target.status >= 300) {
-          this.onImageError.call(this, ERRORS.IMAGE_FAILED_TO_LOAD);
-          return;
-        }
-        this.loadFile(e.target.response);
-      };
-      xhr.open('GET', imageSrc);
-      xhr.responseType = 'blob';
-      xhr.send();
+      fetch(imageSrc)
+        .then(response => {
+          if (!response.ok) throw new Error('Load failed');
+          return response.blob();
+        })
+        .then(blob => this.loadFile(blob))
+        .catch(() => this.onImageError(ERRORS.IMAGE_FAILED_TO_LOAD));
     }
   }
 
@@ -231,7 +219,7 @@ class Cropit {
       smallImage: this.options.smallImage,
     })) {
       this.onImageError(ERRORS.SMALL_IMAGE);
-      if (this.image.src) { this.setImageLoadedClass(); }
+      if (this.image.src) this.setPreviewClass('loaded');
       return;
     }
 
@@ -240,64 +228,52 @@ class Cropit {
 
   onImageLoaded() {
     this.rotation = 0;
-    this.setupZoomer(this.options.imageState && this.options.imageState.zoom || this.initialZoom);
-    if (this.options.imageState && this.options.imageState.offset) {
-      this.offset = this.options.imageState.offset;
-    } else {
-      this.centerImage();
-    }
+    this.setupZoomer(this.options.imageState?.zoom ?? this.initialZoom);
+    this.offset = this.options.imageState?.offset ?? this.calculateCenterOffset();
 
     this.options.imageState = {};
-
     this.$image.attr('src', this.image.src);
-    if (this.options.imageBackground) {
-      this.$bg.attr('src', this.image.src);
-    }
+    this.$bg?.attr('src', this.image.src);
 
-    this.setImageLoadedClass();
-
+    this.setPreviewClass('loaded');
     this.imageLoaded = true;
-
     this.options.onImageLoaded();
+  }
+
+  // 提取居中计算逻辑
+  calculateCenterOffset() {
+    return {
+      x: (this.previewSize.width - this.image.width * this.zoom) / 2,
+      y: (this.previewSize.height - this.image.height * this.zoom) / 2,
+    };
   }
 
   onImageError(error) {
     this.options.onImageError(error);
-    this.removeImageLoadingClass();
-  }
-
-  setImageLoadingClass() {
-    this.$preview
-      .removeClass(CLASS_NAMES.IMAGE_LOADED)
-      .addClass(CLASS_NAMES.IMAGE_LOADING);
-  }
-
-  setImageLoadedClass() {
-    this.$preview
-      .removeClass(CLASS_NAMES.IMAGE_LOADING)
-      .addClass(CLASS_NAMES.IMAGE_LOADED);
-  }
-
-  removeImageLoadingClass() {
     this.$preview.removeClass(CLASS_NAMES.IMAGE_LOADING);
   }
 
+  // 合并class操作方法
+  setPreviewClass(state) {
+    this.$preview
+      .removeClass(CLASS_NAMES.IMAGE_LOADING, CLASS_NAMES.IMAGE_LOADED)
+      .addClass(state === 'loading' ? CLASS_NAMES.IMAGE_LOADING : CLASS_NAMES.IMAGE_LOADED);
+  }
+
   getEventPosition(e) {
-    if (e.originalEvent && e.originalEvent.touches && e.originalEvent.touches[0]) {
-      e = e.originalEvent.touches[0];
-    }
-    if (e.clientX && e.clientY) {
-      return { x: e.clientX, y: e.clientY };
-    }
+    const touch = e.originalEvent?.touches?.[0];
+    if (touch) return { x: touch.clientX, y: touch.clientY };
+    if (e.clientX && e.clientY) return { x: e.clientX, y: e.clientY };
+    return null;
   }
 
   onPreviewEvent(e) {
-    if (!this.imageLoaded) { return; }
+    if (!this.imageLoaded) return;
 
     this.moveContinue = false;
     this.$imageContainer.off(EVENTS.PREVIEW_MOVE);
 
-    if (e.type === 'mousedown' || e.type === 'touchstart') {
+    if (['mousedown', 'touchstart'].includes(e.type)) {
       this.origin = this.getEventPosition(e);
       this.moveContinue = true;
       this.$imageContainer.on(EVENTS.PREVIEW_MOVE, this.onMove.bind(this));
@@ -311,75 +287,67 @@ class Cropit {
 
   onMove(e) {
     const eventPosition = this.getEventPosition(e);
-
     if (this.moveContinue && eventPosition) {
       this.offset = {
         x: this.offset.x + eventPosition.x - this.origin.x,
         y: this.offset.y + eventPosition.y - this.origin.y,
       };
     }
-
     this.origin = eventPosition;
-
     e.stopPropagation();
     return false;
   }
 
   set offset(position) {
-    if (!position || !this.exists(position.x) || !this.exists(position.y)) { return; }
+    if (!position || !this.exists(position.x) || !this.exists(position.y)) return;
 
     this._offset = this.fixOffset(position);
     this.renderImage();
-
     this.options.onOffsetChange(position);
   }
 
-  // 补充原代码中缺失的exists方法（从utils引入）
+  get offset() {
+    return this._offset;
+  }
+
+  // 简化存在性检查
   exists(value) {
-    return value !== null && value !== undefined;
+    return value != null;
   }
 
   fixOffset(offset) {
-    if (!this.imageLoaded) { return offset; }
+    if (!this.imageLoaded) return offset;
 
-    const ret = { x: offset.x, y: offset.y };
-
+    const ret = { ...offset };
     if (!this.options.freeMove) {
-      if (this.image.width * this.zoom >= this.previewSize.width) {
-        ret.x = Math.min(0, Math.max(ret.x, this.previewSize.width - this.image.width * this.zoom));
-      } else {
-        ret.x = Math.max(0, Math.min(ret.x, this.previewSize.width - this.image.width * this.zoom));
-      }
+      const imgWidth = this.image.width * this.zoom;
+      const imgHeight = this.image.height * this.zoom;
 
-      if (this.image.height * this.zoom >= this.previewSize.height) {
-        ret.y = Math.min(0, Math.max(ret.y, this.previewSize.height - this.image.height * this.zoom));
-      } else {
-        ret.y = Math.max(0, Math.min(ret.y, this.previewSize.height - this.image.height * this.zoom));
-      }
+      // 简化边界计算逻辑
+      ret.x = imgWidth >= this.previewSize.width
+        ? Math.min(0, Math.max(ret.x, this.previewSize.width - imgWidth))
+        : Math.max(0, Math.min(ret.x, this.previewSize.width - imgWidth));
+
+      ret.y = imgHeight >= this.previewSize.height
+        ? Math.min(0, Math.max(ret.y, this.previewSize.height - imgHeight))
+        : Math.max(0, Math.min(ret.y, this.previewSize.height - imgHeight));
     }
 
     ret.x = Math.round(ret.x);
     ret.y = Math.round(ret.y);
-
     return ret;
   }
 
   centerImage() {
-    if (!this.image.width || !this.image.height || !this.zoom) { return; }
-
-    this.offset = {
-      x: (this.previewSize.width - this.image.width * this.zoom) / 2,
-      y: (this.previewSize.height - this.image.height * this.zoom) / 2,
-    };
+    if (!this.image.width || !this.image.height || !this.zoom) return;
+    this.offset = this.calculateCenterOffset();
   }
 
   onZoomSliderChange() {
-    if (!this.imageLoaded) { return; }
+    if (!this.imageLoaded) return;
 
-    this.zoomSliderPos = Number(this.$zoomSlider.val());
-    const newZoom = this.zoomer.getZoom(this.zoomSliderPos);
-    if (newZoom === this.zoom) { return; }
-    this.zoom = newZoom;
+    const newZoom = this.zoomer.getZoom(Number(this.$zoomSlider.val()));
+    if (newZoom !== this.zoom) this.zoom = newZoom;
   }
 
   enableZoomSlider() {
@@ -401,17 +369,11 @@ class Cropit {
       initialZoom: zoom,
     });
     this.zoom = this.zoomer.getZoom();
-    this.zoomSliderPos = this.zoomer.getSliderPosition();
-    this.$zoomSlider.val(this.zoomSliderPos);
+    this.$zoomSlider.val(this.zoomer.getSliderPosition());
 
-    if (this.zoomer.isZoomable()) {
-      this.enableZoomSlider();
-    } else {
-      this.disableZoomSlider();
-    }
+    this.zoomer.isZoomable() ? this.enableZoomSlider() : this.disableZoomSlider();
   }
 
-  // 补充原代码中缺失的shouldRejectImage方法
   shouldRejectImage({ imageWidth, imageHeight, previewSize, maxZoom, exportZoom, smallImage }) {
     if (smallImage === 'allow') return false;
     const requiredWidth = previewSize.width / (maxZoom * exportZoom);
@@ -419,25 +381,20 @@ class Cropit {
     return imageWidth < requiredWidth || imageHeight < requiredHeight;
   }
 
-  // 补充渲染方法（原代码可能遗漏）
-  renderImage() {
-    const transform = `translate(${this._offset.x}px, ${this._offset.y}px) scale(${this.zoom}) rotate(${this.rotation}deg)`;
-    this.$image.css({
-      transform,
-      webkitTransform: transform,
-    });
-    if (this.$bg) {
-      this.$bg.css({
-        transform,
-        webkitTransform: transform,
-      });
-    }
+  // 提取transform设置逻辑
+  setElementTransform($el, offset, zoom, rotation) {
+    const transform = `translate(${offset.x}px, ${offset.y}px) scale(${zoom}) rotate(${rotation}deg)`;
+    $el.css({ transform, webkitTransform: transform });
   }
 
-  // 暴露获取裁剪后图片数据的方法（用于下载）
+  renderImage() {
+    this.setElementTransform(this.$image, this._offset, this.zoom, this.rotation);
+    this.$bg && this.setElementTransform(this.$bg, this._offset, this.zoom, this.rotation);
+  }
+
   getCroppedImageData(options = {}) {
     const canvas = document.createElement('canvas');
-    const scale = options.exportZoom || this.options.exportZoom;
+    const scale = options.exportZoom ?? this.options.exportZoom;
     canvas.width = this.previewSize.width * scale;
     canvas.height = this.previewSize.height * scale;
 
@@ -450,11 +407,10 @@ class Cropit {
       this.image.height * this.zoom * scale
     );
 
-    return canvas.toDataURL(options.format || 'image/png', options.quality || 1);
+    return canvas.toDataURL(options.format ?? 'image/png', options.quality ?? 1);
   }
 }
 
-// 补充Zoomer类定义（原代码依赖）
 class Zoomer {
   setup(options) {
     this.imageSize = options.imageSize;
@@ -467,14 +423,10 @@ class Zoomer {
   }
 
   calculateZoomRange() {
-    this.minPossibleZoom = Math.min(
-      this.previewSize.width / this.imageSize.width,
-      this.previewSize.height / this.imageSize.height
-    );
-    this.maxPossibleZoom = Math.max(
-      this.previewSize.width / this.imageSize.width,
-      this.previewSize.height / this.imageSize.height
-    );
+    const ratioW = this.previewSize.width / this.imageSize.width;
+    const ratioH = this.previewSize.height / this.imageSize.height;
+    this.minPossibleZoom = Math.min(ratioW, ratioH);
+    this.maxPossibleZoom = Math.max(ratioW, ratioH);
     this.zoomMin = Math.max(this.minZoom, this.minPossibleZoom);
     this.zoomMax = Math.min(this.maxZoom, this.maxPossibleZoom);
   }
@@ -484,8 +436,9 @@ class Zoomer {
   }
 
   getZoom(sliderPos) {
-    if (sliderPos === undefined) return this.currentZoom;
-    return this.zoomMin + (this.zoomMax - this.zoomMin) * sliderPos;
+    return sliderPos === undefined 
+      ? this.currentZoom 
+      : this.zoomMin + (this.zoomMax - this.zoomMin) * sliderPos;
   }
 
   getSliderPosition() {
@@ -497,7 +450,7 @@ class Zoomer {
   }
 }
 
-// 引入必要的常量（需与constants.js对应）
+// 常量定义优化（使用数组拼接更易维护）
 const CLASS_NAMES = {
   PREVIEW: 'cropit-preview',
   PREVIEW_IMAGE_CONTAINER: 'cropit-preview-image-container',
@@ -518,9 +471,12 @@ const ERRORS = {
 };
 
 const EVENTS = {
-  PREVIEW: 'mousedown.cropit mouseup.cropit mouseleave.cropit touchstart.cropit touchend.cropit touchcancel.cropit touchleave.cropit',
-  PREVIEW_MOVE: 'mousemove.cropit touchmove.cropit',
-  ZOOM_INPUT: 'mousemove.cropit touchmove.cropit change.cropit',
+  PREVIEW: [
+    'mousedown.cropit', 'mouseup.cropit', 'mouseleave.cropit',
+    'touchstart.cropit', 'touchend.cropit', 'touchcancel.cropit', 'touchleave.cropit'
+  ].join(' '),
+  PREVIEW_MOVE: ['mousemove.cropit', 'touchmove.cropit'].join(' '),
+  ZOOM_INPUT: ['mousemove.cropit', 'touchmove.cropit', 'change.cropit'].join(' '),
 };
 
 export default Cropit;

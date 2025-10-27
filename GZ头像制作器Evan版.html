@@ -145,24 +145,47 @@
             font-weight: 600;
         }
 
-        .mainTable {
+        /* 主要内容区域使用flex布局 */
+        .main-content {
+            display: flex;
+            gap: 20px;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 20px;
-            margin: 0 auto;
+            margin-bottom: 30px;
         }
 
-        .mainTable th {
+        /* 左侧编辑区 */
+        .editor-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 中间操作区与设置整合 */
+        .controls-section {
+            flex: 0 0 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* 右侧预览区 */
+        .preview-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
             background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
             border-radius: var(--radius);
-            padding: 30px;
+            padding: 20px;
             box-shadow: var(--shadow);
-            vertical-align: top;
-            width: 33.333%;
             transition: var(--transition);
         }
 
-        .mainTable th:hover {
+        .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 22px rgba(0,0,0,0.2);
         }
@@ -175,7 +198,7 @@
             width: 100%;
             max-width: 360px;
             height: 360px;
-            margin: 0 auto 30px;
+            margin: 0 auto 20px;
             border-radius: var(--radius);
             background-color: var(--bg-tertiary);
             display: flex;
@@ -240,7 +263,7 @@
         .image-size-label {
             color: var(--text-secondary);
             font-size: 15px;
-            margin: 20px 0 10px;
+            margin: 15px 0 10px;
             text-align: center;
         }
 
@@ -252,7 +275,7 @@
             border-radius: 5px;
             background: var(--bg-input);
             outline: none;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
             display: block;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
         }
@@ -326,12 +349,13 @@
             font-size: 17px;
             font-weight: 600;
             transition: var(--transition);
-            margin: 8px;
+            margin: 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             box-shadow: 0 4px 12px rgba(66, 153, 225, 0.2);
+            width: 100%;
         }
 
         button:hover {
@@ -359,10 +383,7 @@
             background-color: var(--secondary);
             font-weight: 600;
             padding: 18px 40px;
-            margin: 25px 0;
             font-size: 18px;
-            width: 100%;
-            max-width: 260px;
             box-shadow: 0 5px 15px rgba(128, 90, 213, 0.2);
         }
 
@@ -374,8 +395,6 @@
 
         #download-btn {
             background-color: var(--success);
-            width: 100%;
-            max-width: 260px;
             box-shadow: 0 4px 12px rgba(72, 187, 120, 0.2);
         }
 
@@ -384,31 +403,22 @@
             box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
         }
 
-        table tr {
-            margin-bottom: 5px;
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
             display: block;
-        }
-
-        table tr th {
-            padding: 8px 0;
-            text-align: left;
-            background-color: transparent;
-            box-shadow: none;
-            border-radius: 0;
-            width: 40%;
-            vertical-align: middle;
-            font-weight: 500;
+            margin-bottom: 5px;
             color: var(--text-secondary);
-            transform: none;
-        }
-
-        table tr th:last-child {
-            width: 60%;
+            font-weight: 500;
         }
 
         #canvas {
@@ -454,9 +464,7 @@
         .action-buttons {
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 12px;
-            padding: 25px 0;
         }
 
         .canvas-container {
@@ -467,10 +475,10 @@
         .canvas-info {
             font-size: 15px;
             color: var(--text-secondary);
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             line-height: 1.8;
             background: rgba(30, 42, 71, 0.5);
-            padding: 18px;
+            padding: 15px;
             border-radius: var(--radius-sm);
             border-left: 4px solid var(--primary);
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
@@ -528,13 +536,12 @@
 
         /* 作者碎碎念样式 */
         .author-notes {
-            margin-top: 30px;
             animation: fadeIn 0.6s ease;
         }
 
         .author-notes h3 {
             color: var(--accent);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-size: 1.3rem;
             display: flex;
             align-items: center;
@@ -548,12 +555,13 @@
 
         .author-notes > div {
             background: rgba(30, 42, 71, 0.5);
-            padding: 18px;
+            padding: 15px;
             border-radius: var(--radius-sm);
             border-left: 4px solid var(--accent);
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            line-height: 1.8;
+            line-height: 1.6;
             transition: var(--transition);
+            font-size: 0.95rem;
         }
 
         .author-notes > div:hover {
@@ -567,12 +575,25 @@
         }
 
         @media (max-width: 1024px) {
-            .mainTable {
-                border-spacing: 15px;
+            .main-content {
+                flex-direction: column;
             }
             
-            .mainTable th {
-                padding: 25px;
+            .controls-section {
+                flex: none;
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .action-buttons button {
+                flex: 1;
+                min-width: 150px;
+                margin: 5px;
             }
             
             .tribute-section {
@@ -586,15 +607,18 @@
         }
 
         @media (max-width: 768px) {
-            .mainTable, .mainTable tr, .mainTable th {
-                display: block;
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons button {
                 width: 100%;
             }
             
-            .mainTable th {
-                margin-bottom: 25px;
-            }
-
             .cropit-preview, #canvas {
                 max-width: 100%;
             }
@@ -660,9 +684,11 @@
             }
         </script>
 
-        <table class="mainTable">
-            <tr>
-                <th>
+        <!-- 主要内容区域使用flex布局 -->
+        <div class="main-content">
+            <!-- 左侧编辑区 -->
+            <div class="editor-section">
+                <div class="card">
                     <div class="image-editor">
                         <center>
                             <input type="file" class="cropit-image-input" id="image-input"><br>
@@ -685,127 +711,125 @@
                             <div class="image-size-label">
                                 - 调整图片大小 +
                             </div>
-                            <input type="range" class="cropit-image-zoom-input" style="width:300px"><br><br>
-
-                            <table style="text-align:left; max-width: 400px; margin: 0 auto;">
-                                <tr>
-                                    <th>球员名称</th>
-                                    <th><input type="text" id="firstname" value="Mr.Potato"
-                                            style="font-size:20px; text-align:center;"></th>
-                                </tr>
-                                <tr>
-                                    <th>国籍</th>
-                                    <th>
-                                        <input type="text" list="nationlist" id="nation" name="nation" value=""
-                                            style="font-size:10px;" />
-                                        <datalist id="nationlist"></datalist>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>潜力（勋章）</th>
-                                    <th>
-                                        <select style="font-size:15px;" name="poten" id="poten">
-                                            <option value="filter/filter1.png" style="background:skyblue; color:white;">
-                                                ---潜力设置---</option>
-                                            <option value="" style="background:#104578; color:white;">固定潜力</option>
-                                            <option value="images/poten/reboot/180.png">180以上</option>
-                                            <option value="images/poten/reboot/170.png">170</option>
-                                            <option value="images/poten/reboot/160.png">160</option>
-                                            <option value="images/poten/reboot/150.png">150</option>
-                                            <option value="images/poten/reboot/140.png">140</option>
-                                            <option value="images/poten/reboot/130.png">130</option>
-                                            <option value="images/poten/reboot/120.png">120</option>
-                                            <option value="" style="background:#104578;color:white;">随机潜力</option>
-                                            <option value="images/poten/reboot/-10.png">-10</option>
-                                            <option value="images/poten/reboot/-95.png">-9.5</option>
-                                            <option value="images/poten/reboot/-9.png">-9</option>
-                                            <option value="images/poten/reboot/-85.png">-8.5</option>
-                                            <option value="images/poten/reboot/-8.png">-8</option>
-                                            <option value="images/poten/reboot/-75.png">-7.5</option>
-                                            <option value="images/poten/reboot/-7.png">-7</option>
-                                            <option value="" style="background:#104578;color:white;">随机人球员</option>
-                                            <option value="images/poten/reboot/gen/gen180.png">180以上</option>
-                                            <option value="images/poten/reboot/gen/gen170.png">170</option>
-                                            <option value="images/poten/reboot/gen/gen160.png">160</option>
-                                            <option value="images/poten/reboot/gen/gen150.png">150</option>
-                                            <option value="images/poten/reboot/gen/gen140.png">140</option>
-                                            <option value="images/poten/reboot/gen/gen130.png">130</option>
-                                            <option value="images/poten/reboot/gen/gen120.png">120</option>
-                                            <option value="" style="background:#104578;color:white;">其他</option>
-                                            <option value="images/poten/reboot/special.png">特别的</option>
-                                            <option value="images/poten/reboot/celeb.png">明星</option>
-                                            <option value="images/poten/reboot/normal.png">正常</option>
-                                            <option value="images/poten/reboot/staff.png">工作人员</option>
-                                            <option value="" style="background:#104578;color:white;">固定潜力背带风格</option>
-                                            <option value="images/poten/reboot_strap/180.png">背带风格 180</option>
-                                            <option value="images/poten/reboot_strap/170.png">背带风格 170</option>
-                                            <option value="images/poten/reboot_strap/160.png">背带风格 160</option>
-                                            <option value="images/poten/reboot_strap/150.png">背带风格 150</option>
-                                            <option value="images/poten/reboot_strap/140.png">背带风格 140</option>
-                                            <option value="images/poten/reboot_strap/130.png">背带风格 130</option>
-                                            <option value="images/poten/reboot_strap/120.png">背带风格 120</option>
-                                            <option value="" style="background:#104578;color:white;">随机潜力背带风格</option>
-                                            <option value="images/poten/reboot_strap/-10.png">背带风格 -10</option>
-                                            <option value="images/poten/reboot_strap/-95.png">背带风格 -95</option>
-                                            <option value="images/poten/reboot_strap/-9.png">背带风格 -9</option>
-                                            <option value="images/poten/reboot_strap/-85.png">背带风格 -85</option>
-                                            <option value="images/poten/reboot_strap/-8.png">背带风格 -8</option>
-                                            <option value="images/poten/reboot_strap/-75.png">背带风格 -75</option>
-                                            <option value="images/poten/reboot_strap/-7.png">背带风格 -7</option>
-                                            <option value="" style="background:#104578;color:white;">背带风格 其他</option>
-                                            <option value="images/poten/reboot_strap/celeb.png">背带风格 明星</option>
-                                            <option value="images/poten/reboot_strap/legend.png">背带风格 传奇</option>
-                                            <option value="images/poten/reboot_strap/staff.png">背带风格 工作人员</option>
-                                            <option value="images/poten/reboot_strap/normal.png">背带风格 正常</option>
-                                        </select>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>照片滤镜</th>
-                                    <th>
-                                        <select style="font-size:15px;" name="imgf" id="imgf">
-                                            <option value="filter/filter1.png">没有滤镜</option>
-                                            <option value="filter/filter2.png">滤镜1</option>
-                                            <option value="filter/filter3.png">滤镜2</option>
-                                            <option value="filter/filter4.png">滤镜3</option>
-                                        </select>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>字体选择</th>
-                                    <th>
-                                        <input type="color" list="fontcolorlist" name="fontf" id="fontf" value="#ffd700"
-                                            style="font-size:15px;" />
-                                        <datalist id="fontcolorlist">
-                                            <option value="#ffd700">金色</option>
-                                            <option value="#c0c0c0">银色</option>
-                                            <option value="#7b68ee">The Blue Lagoon</option>
-                                            <option value="#b0e0e6">#b0e0e6</option>
-                                            <option value="#f0c27b">#f0c27b</option>
-                                            <option value="#abbaab">Metallic Toad</option>
-                                        </datalist>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>字体长度</th>
-                                    <th>
-                                        <select style="font-size:15px;" name="fontw" id="fontw">
-                                            <option value="base">-- 基本 --</option>
-                                            <option value="long">长名 LONG</option>
-                                            <option value="strap">背带风格 STRAP</option>
-                                        </select>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>制作者签名</th>
-                                    <th><input type="text" id="madeby" value="gzreboot"
-                                            style="font-size:20px; text-align:center;"></th>
-                                </tr>
-                            </table>
+                            <input type="range" class="cropit-image-zoom-input" style="width:300px"><br>
                         </center>
                     </div>
-                </th>
-                <th>
+                </div>
+
+                <!-- 表单设置区域使用网格布局 -->
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstname">球员名称</label>
+                            <input type="text" id="firstname" value="Mr.Potato" style="font-size:20px; text-align:center;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nation">国籍</label>
+                            <input type="text" list="nationlist" id="nation" name="nation" value="" style="font-size:10px;" />
+                            <datalist id="nationlist"></datalist>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="poten">潜力（勋章）</label>
+                            <select style="font-size:15px;" name="poten" id="poten">
+                                <option value="filter/filter1.png" style="background:skyblue; color:white;">---潜力设置---</option>
+                                <option value="" style="background:#104578; color:white;">固定潜力</option>
+                                <option value="images/poten/reboot/180.png">180以上</option>
+                                <option value="images/poten/reboot/170.png">170</option>
+                                <option value="images/poten/reboot/160.png">160</option>
+                                <option value="images/poten/reboot/150.png">150</option>
+                                <option value="images/poten/reboot/140.png">140</option>
+                                <option value="images/poten/reboot/130.png">130</option>
+                                <option value="images/poten/reboot/120.png">120</option>
+                                <option value="" style="background:#104578;color:white;">随机潜力</option>
+                                <option value="images/poten/reboot/-10.png">-10</option>
+                                <option value="images/poten/reboot/-95.png">-9.5</option>
+                                <option value="images/poten/reboot/-9.png">-9</option>
+                                <option value="images/poten/reboot/-85.png">-8.5</option>
+                                <option value="images/poten/reboot/-8.png">-8</option>
+                                <option value="images/poten/reboot/-75.png">-7.5</option>
+                                <option value="images/poten/reboot/-7.png">-7</option>
+                                <option value="" style="background:#104578;color:white;">随机人球员</option>
+                                <option value="images/poten/reboot/gen/gen180.png">180以上</option>
+                                <option value="images/poten/reboot/gen/gen170.png">170</option>
+                                <option value="images/poten/reboot/gen/gen160.png">160</option>
+                                <option value="images/poten/reboot/gen/gen150.png">150</option>
+                                <option value="images/poten/reboot/gen/gen140.png">140</option>
+                                <option value="images/poten/reboot/gen/gen130.png">130</option>
+                                <option value="images/poten/reboot/gen/gen120.png">120</option>
+                                <option value="" style="background:#104578;color:white;">其他</option>
+                                <option value="images/poten/reboot/special.png">特别的</option>
+                                <option value="images/poten/reboot/celeb.png">明星</option>
+                                <option value="images/poten/reboot/normal.png">正常</option>
+                                <option value="images/poten/reboot/staff.png">工作人员</option>
+                                <option value="" style="background:#104578;color:white;">固定潜力背带风格</option>
+                                <option value="images/poten/reboot_strap/180.png">背带风格 180</option>
+                                <option value="images/poten/reboot_strap/170.png">背带风格 170</option>
+                                <option value="images/poten/reboot_strap/160.png">背带风格 160</option>
+                                <option value="images/poten/reboot_strap/150.png">背带风格 150</option>
+                                <option value="images/poten/reboot_strap/140.png">背带风格 140</option>
+                                <option value="images/poten/reboot_strap/130.png">背带风格 130</option>
+                                <option value="images/poten/reboot_strap/120.png">背带风格 120</option>
+                                <option value="" style="background:#104578;color:white;">随机潜力背带风格</option>
+                                <option value="images/poten/reboot_strap/-10.png">背带风格 -10</option>
+                                <option value="images/poten/reboot_strap/-95.png">背带风格 -95</option>
+                                <option value="images/poten/reboot_strap/-9.png">背带风格 -9</option>
+                                <option value="images/poten/reboot_strap/-85.png">背带风格 -85</option>
+                                <option value="images/poten/reboot_strap/-8.png">背带风格 -8</option>
+                                <option value="images/poten/reboot_strap/-75.png">背带风格 -75</option>
+                                <option value="images/poten/reboot_strap/-7.png">背带风格 -7</option>
+                                <option value="" style="background:#104578;color:white;">背带风格 其他</option>
+                                <option value="images/poten/reboot_strap/celeb.png">背带风格 明星</option>
+                                <option value="images/poten/reboot_strap/legend.png">背带风格 传奇</option>
+                                <option value="images/poten/reboot_strap/staff.png">背带风格 工作人员</option>
+                                <option value="images/poten/reboot_strap/normal.png">背带风格 正常</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="imgf">照片滤镜</label>
+                            <select style="font-size:15px;" name="imgf" id="imgf">
+                                <option value="filter/filter1.png">没有滤镜</option>
+                                <option value="filter/filter2.png">滤镜1</option>
+                                <option value="filter/filter3.png">滤镜2</option>
+                                <option value="filter/filter4.png">滤镜3</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fontf">字体选择</label>
+                            <input type="color" list="fontcolorlist" name="fontf" id="fontf" value="#ffd700" style="font-size:15px;" />
+                            <datalist id="fontcolorlist">
+                                <option value="#ffd700">金色</option>
+                                <option value="#c0c0c0">银色</option>
+                                <option value="#7b68ee">The Blue Lagoon</option>
+                                <option value="#b0e0e6">#b0e0e6</option>
+                                <option value="#f0c27b">#f0c27b</option>
+                                <option value="#abbaab">Metallic Toad</option>
+                            </datalist>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fontw">字体长度</label>
+                            <select style="font-size:15px;" name="fontw" id="fontw">
+                                <option value="base">-- 基本 --</option>
+                                <option value="long">长名 LONG</option>
+                                <option value="strap">背带风格 STRAP</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="madeby">制作者签名</label>
+                            <input type="text" id="madeby" value="gzreboot" style="font-size:20px; text-align:center;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中间操作按钮区 -->
+            <div class="controls-section">
+                <div class="card">
                     <div class="action-buttons">
                         <button class="rotate-ccw-btn tooltip" data-tooltip="逆时针旋转90度">逆时旋转</button>
                         <button class="rotate-cw-btn tooltip" data-tooltip="顺时针旋转90度">顺时旋转</button>
@@ -814,29 +838,31 @@
                         <button class="export tooltip" data-tooltip="生成图片">点击生成</button>
                         <button id="download-btn" class="tooltip" data-tooltip="下载当前图片">点击下载</button>
                     </div>
-                </th>
-                <th>
-                    <div class="canvas-container">
-                        <div class="canvas-info">
-                            '照片转换' <b>点击!</b><br>
-                            右键单击下面的图像 <span>'将图像另存为'</span>
-                        </div>
-                        <canvas id="canvas" id="chart" width=350 height=350></canvas>
-                    </div>
+                </div>
+            </div>
 
-                    <!-- 作者碎碎念模块（右下方） -->
-                    <div class="author-notes">
-                        <h3>作者的碎碎念</h3>
-                        <div>
-                            <p>作者其实就是一个在校的大二信息安全专业学生 但主要也是喜欢FM 并且觉得老一个版本的ui不好看</p>
-                            <p>所以自己花了3天去自学并且修改了这款GZ风格的头像处理器</p>
-                            <p>如果有想要新的功能需求或者发现bug，欢迎随时反馈 wx号：lowerEvan</p>
-                            <p>后续也在考虑加入批量处理功能，敬请大家期待</p>
-                        </div>
+            <!-- 右侧预览区 -->
+            <div class="preview-section">
+                <div class="card canvas-container">
+                    <div class="canvas-info">
+                        '照片转换' <b>点击!</b><br>
+                        右键单击下面的图像 <span>'将图像另存为'</span>
                     </div>
-                </th>
-            </tr>
-        </table>
+                    <canvas id="canvas" id="chart" width=350 height=350></canvas>
+                </div>
+
+                <!-- 作者碎碎念模块 -->
+                <div class="card author-notes">
+                    <h3>作者的碎碎念</h3>
+                    <div>
+                        <p>作者其实就是一个在校的大二信息安全专业学生 但主要也是喜欢FM 并且觉得老一个版本的ui不好看</p>
+                        <p>所以自己花了3天去自学并且修改了这款GZ风格的头像处理器</p>
+                        <p>如果有想要新的功能需求或者发现bug，欢迎随时反馈 wx号：lowerEvan</p>
+                        <p>后续也在考虑加入批量处理功能，敬请大家期待</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
