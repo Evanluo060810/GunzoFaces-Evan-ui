@@ -1,5 +1,7 @@
 # GZ 生成器V24Evan罗改版
 
+[English Version](README_EN.md) | [中文版](README.md)
+
 ## 版本信息
 - 当前版本: V1.1
 - 发布日期: 2026-02-18
@@ -74,3 +76,21 @@
 - 感谢: FMGUNZO
 - 汉化＆二改: 卡尔纳斯
 - 三改: Evan罗
+
+## 许可证
+本项目采用 MIT 许可证 - 详情请参阅 LICENSE 文件
+
+## 贡献
+欢迎贡献！请随时提交 Pull Request。
+
+## 问题反馈
+如果您遇到任何问题，请在 GitHub 上打开一个 issue。
+
+## 星标历史
+[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/gz-generator&type=Date)](https://star-history.com/#yourusername/gz-generator&Date)
+
+## 统计信息
+![GitHub stars](https://img.shields.io/github/stars/yourusername/gz-generator.svg?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/gz-generator.svg?style=social)
+![GitHub issues](https://img.shields.io/github/issues/yourusername/gz-generator.svg)
+![GitHub license](https://img.shields.io/github/license/yourusername/gz-generator.svg)
