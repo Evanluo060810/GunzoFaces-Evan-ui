@@ -116,7 +116,7 @@ class Cropit {
       allowDragNDrop: true,
       initialZoom: 1,
       maxZoom: 1,
-      exportZoom: 1,
+      exportZoom: 2, // 核心修改：默认缩放2倍，350×2=700
       freeMove: false,
       smallImage: 'reject',
       onFileChange: () => {},

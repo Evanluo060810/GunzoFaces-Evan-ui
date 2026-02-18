@@ -1,14 +1,76 @@
-Core Principle: No changes to functional logic, file references, or data storage addresses—focus solely on UI/UX enhancements.
-Key Changes:
-Redundant Content Removal: Eliminated unnecessary acknowledgment sections (e.g., credits to FMGUNZO, Karnas) to streamline the interface.
-UI Visual Upgrade:
-Adopted a consistent dark theme with CSS variables for color standardization, plus gradient backgrounds and subtle textures to enhance visual depth.
-Refined card-based layout, buttons, and form elements (inputs, dropdowns, sliders) with unified borders, rounded corners, and shadow effects. Added polished details like gradient dividers and grid backgrounds for preview areas.
-Applied gradient text for headings and visual indicators for info sections to boost professional aesthetics.
-UX Improvements:
-Added rich interactive feedback (hover lift, shadow transitions, scaling effects) for buttons, sliders, and form elements.
-Implemented tooltips for intuitive operation guidance; added hover states for the canvas and preview areas for clearer interaction feedback.
-Layout & Responsiveness Optimization:
-Utilized Flexbox and percentage-based widths to optimize element spacing and reduce visual clutter.
-Integrated media queries to enable vertical layout adaptation on mobile devices, preventing overflow on small screens and improving cross-device compatibility.
+# GZ 生成器V24Evan罗改版
 
+## 版本信息
+- 当前版本: V1.1
+- 发布日期: 2026-02-18
+
+## 版本变更记录
+
+### V1.1 变更内容 (2026-02-18)
+1. **国家数据加载优化**
+   - 修改加载状态文本为"国家数据加载中..."
+   - 添加10秒超时机制，当后端服务器连接超时时直接读取本地文件
+   - 优化本地文件读取逻辑，尝试多个可能的路径
+   - 将完整的国家数据嵌入到dataop.js文件中作为备用数据源
+   - 修改错误处理逻辑，当所有尝试都失败时使用内置的完整国家数据
+
+2. **数据内容修正**
+   - 删除了"中国台湾"和"中国台北"相关条目，确保数据内容的准确性
+
+3. **系统稳定性提升**
+   - 增强了错误处理和日志输出，便于排查问题
+   - 优化了缓存机制，提升数据加载速度
+
+### V1.0 变更内容
+1. **核心原则**
+   - 保持功能逻辑、文件引用和数据存储地址不变，专注于UI/UX增强
+
+2. **界面视觉升级**
+   - 采用统一的深色主题，使用CSS变量实现颜色标准化
+   - 添加渐变背景和微妙纹理，增强视觉深度
+   - 优化卡片式布局、按钮和表单元素（输入框、下拉菜单、滑块）
+   - 统一边框、圆角和阴影效果
+   - 为标题应用渐变文本，提升专业美观度
+
+3. **用户体验改进**
+   - 为按钮、滑块和表单元素添加丰富的交互反馈（悬停提升、阴影过渡、缩放效果）
+   - 实现工具提示，提供直观的操作指导
+   - 为画布和预览区域添加悬停状态，提供更清晰的交互反馈
+
+4. **布局和响应式优化**
+   - 使用Flexbox和基于百分比的宽度优化元素间距，减少视觉混乱
+   - 集成媒体查询，实现移动设备上的垂直布局适配
+   - 防止小屏幕上的溢出，提高跨设备兼容性
+
+5. **冗余内容移除**
+   - 消除不必要的致谢部分，简化界面
+
+## 使用说明
+1. 打开 `GZ头像制作器Evan版.html` 文件
+2. 点击"选择文件"按钮上传图片
+3. 调整图片大小和位置
+4. 设置球员名称、国籍、潜力等信息
+5. 点击"点击生成"按钮生成图片
+6. 右键点击生成的图片，选择"将图像另存为"保存图片
+
+## 技术栈
+- HTML5
+- CSS3
+- JavaScript
+- jQuery
+- cropit.js
+
+## 项目结构
+- `GZ头像制作器Evan版.html` - 主页面
+- `Data/` - 国家数据文件
+- `dist/` - 第三方库
+- `filter/` - 滤镜和图标
+- `font/` - 字体文件
+- `images/` - 图片资源
+- `src/` - 源代码文件
+
+## 致谢
+- 制作: Mr.Potato
+- 感谢: FMGUNZO
+- 汉化＆二改: 卡尔纳斯
+- 三改: Evan罗
