@@ -87,10 +87,10 @@
 如果您遇到任何问题，请在 GitHub 上打开一个 issue。
 
 ## 星标历史
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/gz-generator&type=Date)](https://star-history.com/#yourusername/gz-generator&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Evanluo060810/GunzoFaces-Evan-ui&type=Date)](https://star-history.com/#Evanluo060810/GunzoFaces-Evan-ui&Date)
 
 ## 统计信息
-![GitHub stars](https://img.shields.io/github/stars/yourusername/gz-generator.svg?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/gz-generator.svg?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/gz-generator.svg)
-![GitHub license](https://img.shields.io/github/license/yourusername/gz-generator.svg)
+![GitHub stars](https://img.shields.io/github/stars/Evanluo060810/GunzoFaces-Evan-ui.svg?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Evanluo060810/GunzoFaces-Evan-ui.svg?style=social)
+![GitHub issues](https://img.shields.io/github/issues/Evanluo060810/GunzoFaces-Evan-ui.svg)
+![GitHub license](https://img.shields.io/github/license/Evanluo060810/GunzoFaces-Evan-ui.svg)

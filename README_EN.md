@@ -83,10 +83,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 If you encounter any issues, please open an issue on GitHub.
 
 ## Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/gz-generator&type=Date)](https://star-history.com/#yourusername/gz-generator&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Evanluo060810/GunzoFaces-Evan-ui&type=Date)](https://star-history.com/#Evanluo060810/GunzoFaces-Evan-ui&Date)
 
 ## Stats
-![GitHub stars](https://img.shields.io/github/stars/yourusername/gz-generator.svg?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/gz-generator.svg?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/gz-generator.svg)
-![GitHub license](https://img.shields.io/github/license/yourusername/gz-generator.svg)
+![GitHub stars](https://img.shields.io/github/stars/Evanluo060810/GunzoFaces-Evan-ui.svg?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Evanluo060810/GunzoFaces-Evan-ui.svg?style=social)
+![GitHub issues](https://img.shields.io/github/issues/Evanluo060810/GunzoFaces-Evan-ui.svg)
+![GitHub license](https://img.shields.io/github/license/Evanluo060810/GunzoFaces-Evan-ui.svg)
